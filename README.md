@@ -1,284 +1,170 @@
-# AI-Based Pothole Detection System using Raspberry Pi 4
+# AI-Based Pothole Detection System 🚧
 
-An edge AI system that detects potholes in real-time using a Raspberry Pi 4, Raspberry Pi Camera, and a custom-trained YOLOv8 model. The long-term goal is to store pothole detections in Firebase and visualize them on an interactive map using GPS coordinates.
+An embedded computer vision system that detects potholes in real time using a Raspberry Pi and a custom-trained YOLOv8 model. Future versions will automatically upload pothole locations to Firebase with GPS coordinates and visualize them on a live map.
 
 ---
 
 ## Project Status
 
-**Current Phase:** Dataset Selection & Model Training
+### ✅ Completed
 
-### Completed
+- Raspberry Pi 4 setup
+- SSH remote access
+- Python development environment
+- Custom YOLOv8n model trained on Kaggle
+- Model transferred to Raspberry Pi
+- PyTorch + OpenCV configured on Raspberry Pi
+- Ultralytics installed
+- Successfully loaded trained model on Raspberry Pi
 
-- [x] Raspberry Pi 4 headless setup
-- [x] Raspberry Pi OS Bookworm (64-bit) installed
-- [x] SSH configured and working
-- [x] Raspberry Pi connected to Wi-Fi hotspot
-- [x] Python environment configured
-- [x] OpenCV installed and verified
-- [x] Raspberry Pi camera utilities (`rpicam-apps`) installed
-- [x] Virtual environment created
-- [x] Roboflow dataset selected
-- [x] Google Colab training environment configured
+### 🚧 In Progress
 
-### In Progress
+- Raspberry Pi Camera integration
+- Real-time pothole detection
+- Live inference optimization
 
-- [ ] Train custom YOLOv8n model
-- [ ] Evaluate model accuracy
-- [ ] Deploy model to Raspberry Pi
+### 📅 Planned
 
-### Upcoming
-
-- [ ] Connect Raspberry Pi Camera
-- [ ] Live pothole detection
-- [ ] Save detection images locally
-- [ ] Integrate Firebase
-- [ ] Add GPS module
-- [ ] Display potholes on interactive map
-- [ ] Optimize inference speed
+- GPS integration
+- Firebase database
+- Live map visualization
+- Web dashboard
+- Automatic pothole logging
+- Confidence filtering
+- Offline caching
 
 ---
 
 # Hardware
 
-- Raspberry Pi 4 Model B (4 GB RAM)
+- Raspberry Pi 4 (64-bit)
 - Raspberry Pi Camera Module (to be connected)
-- Official Raspberry Pi Power Adapter
-- microSD Card
-- Laptop (Linux)
-- iPhone Hotspot (used for headless SSH)
+- GPS Module (planned)
 
 ---
 
-# Software
+# Software Stack
 
-## Raspberry Pi
-
-- Raspberry Pi OS Bookworm (64-bit)
-- Python 3.11
+- Python
+- YOLOv8n
+- PyTorch
 - OpenCV
-- rpicam-apps
-- SSH
-
-## Development
-
-- Google Colab
-- Ultralytics YOLOv8
-- Roboflow
-- Git
-- GitHub
-- VS Code
-
----
-
-# Project Architecture
-
-```
-                 Google Colab
-                      │
-                      │ Train YOLOv8n
-                      ▼
-                  best.pt Model
-                      │
-             Copy via SCP / GitHub
-                      │
-                      ▼
-             Raspberry Pi 4
-                      │
-             Raspberry Pi Camera
-                      │
-                      ▼
-              YOLO Inference
-                      │
-          ┌───────────┴───────────┐
-          ▼                       ▼
-   Save Detection          Firebase (Future)
-          │                       │
-          └───────────┬───────────┘
-                      ▼
-              Interactive Map
-```
-
----
-
-# Repository Structure
-
-```
-pothole-detection-system/
-
-├── README.md
-├── LICENSE
-├── .gitignore
-├── training/
-│   ├── train.ipynb
-│   ├── train.py
-│   └── dataset.md
-│
-├── raspberry_pi/
-│   ├── src/
-│   │   ├── main.py
-│   │   ├── detector.py
-│   │   ├── camera.py
-│   │   ├── firebase.py
-│   │   └── gps.py
-│   │
-│   └── requirements.txt
-│
-├── models/
-│   └── README.md
-│
-├── docs/
-│
-└── web_dashboard/
-```
-
----
-
-# Dataset
-
-Current Dataset
-
-- Roboflow Universe
-- Pothole Dataset
-- Version 17
-- Object Detection
-
-Dataset Statistics
-
-- Total Images: **2718**
-- Train: **2124**
-- Validation: **371**
-- Test: **223**
-- Classes: **1 (Pothole)**
+- Ultralytics
+- Kaggle (training)
+- Raspberry Pi OS / Debian
+- Firebase (planned)
 
 ---
 
 # Model
 
-Framework
+Architecture:
+- YOLOv8n
 
-- Ultralytics YOLOv8
+Training Platform:
+- Kaggle GPU (Tesla T4)
 
-Model
+Training Parameters
 
-- **YOLOv8n**
+- Epochs: 100
+- Image Size: 640×640
+- Batch Size: 16
+- Early Stopping Patience: 20
 
-Reason for choosing YOLOv8n
+Validation Results
 
-- Lightweight
-- Fast inference
-- Suitable for Raspberry Pi 4
-- Good balance between speed and accuracy
+| Metric | Value |
+|--------|------:|
+| Precision | 0.920 |
+| Recall | 0.738 |
+| mAP@50 | 0.818 |
+| mAP@50-95 | 0.496 |
 
 ---
 
-# Planned Workflow
+# Development Log
+
+## Day 1
+
+- Set up Raspberry Pi
+- Configured SSH over Wi-Fi
+- Created project structure
+- Created Python virtual environment
+
+---
+
+## Day 2
+
+### Model Training
+
+- Selected Roboflow pothole dataset
+- Trained YOLOv8n for 100 epochs on Kaggle GPU
+- Saved trained weights (`best.pt`)
+
+### Raspberry Pi Deployment
+
+- Created project directory
 
 ```
-Road Image
-      │
-      ▼
-Raspberry Pi Camera
-      │
-      ▼
-YOLOv8n Model
-      │
-      ▼
-Pothole Detected
-      │
-      ▼
-Capture Image
-      │
-      ▼
-Store Metadata
-      │
-      ▼
-Firebase
-      │
-      ▼
-Interactive Map
+projects/
+└── pothole-detector/
+    ├── models/
+    ├── scripts/
+    ├── data/
+    └── outputs/
+```
+
+- Transferred trained model to Raspberry Pi using SCP
+
+### Issues Encountered
+
+- Colab GPU quota exhausted
+- Switched training workflow to Kaggle
+- Incorrect dataset split
+- Model download confusion
+- PyTorch pip installation attempted to install CUDA packages
+- Ran out of storage during installation
+- Discovered corrupted dpkg database
+- Repaired package manager without reflashing Raspberry Pi
+- Installed ARM-compatible PyTorch
+- Installed OpenCV
+- Installed Ultralytics
+- Successfully loaded custom YOLO model on Raspberry Pi
+
+---
+
+# Current Repository Structure
+
+```
+pothole-detector/
+│
+├── models/
+│   └── best.pt
+│
+├── scripts/
+│
+├── data/
+│
+├── outputs/
+│
+└── README.md
 ```
 
 ---
 
-# Future Features
+# Next Milestones
 
-- GPS integration
-- Firebase Cloud Storage
-- Firestore Database
-- Interactive dashboard
-- Heatmap of potholes
-- Severity estimation
-- Offline detection
-- Automatic image upload
-- Live video inference
-- Web dashboard
+- [ ] Connect Raspberry Pi Camera
+- [ ] Capture live video
+- [ ] Run YOLO inference on camera frames
+- [ ] Draw bounding boxes
+- [ ] Save detected potholes
+- [ ] Read GPS coordinates
+- [ ] Upload detections to Firebase
+- [ ] Display potholes on map
 
 ---
 
-# Development Timeline
+# Goal
 
-### Phase 1
-
-- Raspberry Pi setup
-- Environment setup
-- Dataset selection
-
-### Phase 2
-
-- Train YOLOv8n
-- Evaluate model
-
-### Phase 3
-
-- Deploy model to Raspberry Pi
-- Camera integration
-
-### Phase 4
-
-- Firebase integration
-
-### Phase 5
-
-- GPS integration
-
-### Phase 6
-
-- Interactive map
-
-### Phase 7
-
-- Performance optimization
-
----
-
-# Current Progress
-
-| Task | Status |
-|------|--------|
-| Raspberry Pi Setup | ✅ |
-| SSH Configuration | ✅ |
-| Python Environment | ✅ |
-| Camera Setup | ⏳ |
-| Dataset Selection | ✅ |
-| Model Training | ⏳ |
-| Raspberry Pi Inference | ⏳ |
-| Firebase | ⏳ |
-| GPS | ⏳ |
-| Interactive Map | ⏳ |
-
----
-
-# Author
-
-**Chandranshu Dharmik**
-
-B.Tech Internet of Things Engineering
-
-Final Year Project (Work in Progress)
-
----
-
-## License
-
-This project is currently under development.
+Develop a low-cost embedded AI system capable of automatically detecting potholes in real time and creating a crowd-sourced road damage database for smarter road maintenance.
