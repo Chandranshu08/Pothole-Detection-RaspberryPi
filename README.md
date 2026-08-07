@@ -167,4 +167,4 @@ pothole-detector/
 
 # Goal
 
-Develop a low-cost embedded AI system capable of automatically detecting potholes in real time and creating a crowd-sourced road damage database for smarter road maintenance.
+Develop a low-cost embedded AI system capable of automatically detecting potholes in real time and creating a crowd-sourced road damage database for smarter road maintenance
